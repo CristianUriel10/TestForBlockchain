@@ -44,3 +44,29 @@ export interface PropertyFilters {
   status?: string;
   location?: string;
 }
+
+export interface WalletState {
+  isConnected: boolean;
+  address: string | null;
+  isConnecting: boolean;
+  error: string | null;
+}
+
+export interface WalletProvider {
+  name: string;
+  icon: string;
+  isInstalled: boolean;
+  connect: () => Promise<void>;
+}
+
+// Extend window object for MetaMask
+declare global {
+  interface Window {
+    ethereum?: {
+      isMetaMask?: boolean;
+      request: (args: { method: string; params?: any[] }) => Promise<any>;
+      on?: (event: string, callback: (accounts: string[]) => void) => void;
+      removeListener?: (event: string, callback: (accounts: string[]) => void) => void;
+    };
+  }
+}

@@ -5,11 +5,17 @@ import { mockUser, mockMarketData } from '../data/mockData';
 interface DashboardPageProps {
   walletConnected: boolean;
   onConnectWallet: () => void;
+  walletAddress?: string | null;
+  onDisconnectWallet?: () => void;
+  formatAddress?: (address: string) => string;
 }
 
 export const DashboardPage: React.FC<DashboardPageProps> = ({ 
   walletConnected, 
-  onConnectWallet 
+  onConnectWallet,
+  walletAddress,
+  onDisconnectWallet,
+  formatAddress
 }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50/30 to-blue-50/30 relative overflow-hidden">
@@ -147,12 +153,26 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                     <div className="w-3 h-3 bg-emerald-500 rounded-full"></div>
                     <span className="text-emerald-600 font-medium">Wallet Connected</span>
                   </div>
-                  <div className="text-sm text-gray-600 break-all bg-gray-50 p-3 rounded-lg">
-                    0x742d35cc6634C0532925a3b8D6aD8a7e15b2a9d1
-                  </div>
-                  <button className="w-full border border-red-300 text-red-600 hover:bg-red-50 py-2 px-4 rounded-lg transition-colors">
-                    Disconnect Wallet
-                  </button>
+                  {walletAddress && (
+                    <div className="space-y-2">
+                      <div className="text-sm text-gray-600 break-all bg-gray-50 p-3 rounded-lg font-mono">
+                        {walletAddress}
+                      </div>
+                      {formatAddress && (
+                        <div className="text-xs text-gray-500 text-center">
+                          Short format: {formatAddress(walletAddress)}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  {onDisconnectWallet && (
+                    <button 
+                      onClick={onDisconnectWallet}
+                      className="w-full border border-red-300 text-red-600 hover:bg-red-50 py-2 px-4 rounded-lg transition-colors"
+                    >
+                      Disconnect Wallet
+                    </button>
+                  )}
                 </div>
               ) : (
                 <div className="space-y-4">

@@ -5,9 +5,16 @@ import { Home, Search, Heart, User, Wallet } from 'lucide-react';
 interface NavbarProps {
   onConnectWallet: () => void;
   walletConnected: boolean;
+  walletAddress?: string | null;
+  formatAddress?: (address: string) => string;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onConnectWallet, walletConnected }) => {
+export const Navbar: React.FC<NavbarProps> = ({ 
+  onConnectWallet, 
+  walletConnected, 
+  walletAddress,
+  formatAddress 
+}) => {
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname === path;
@@ -81,7 +88,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onConnectWallet, walletConnected
             >
               <Wallet className="w-4 h-4" />
               <span className="hidden sm:block">
-                {walletConnected ? 'Wallet Connected' : 'Connect Wallet'}
+                {walletConnected && walletAddress && formatAddress 
+                  ? formatAddress(walletAddress)
+                  : walletConnected 
+                    ? 'Wallet Connected' 
+                    : 'Connect Wallet'
+                }
               </span>
             </button>
           </div>
